@@ -32,6 +32,11 @@ class App extends Component {
 
   constructor() {
     super();
+    this.state = { text: "" };
+  }
+
+  componentDidMount() {
+    this.setState({ text: "Bonjour" });
   }
 
   render() {
@@ -39,7 +44,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo"/>
-          <h1 className="App-title">Bienvenue sur le Blindtest</h1>
+          <h1 className="App-title">{ this.state.text }</h1>
         </header>
         <div className="App-images">
           <p>Il va falloir modifier le code pour faire un vrai Blindtest !</p>
