@@ -6,6 +6,7 @@ import logo from './logo.svg';
 import loading from './loading.svg';
 import './App.css';
 import Sound from 'react-sound';
+import { AlbumCover } from './AlbumCover';
 import Button from './Button';
 import { apiToken } from './tokens';
 
@@ -63,7 +64,10 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome</h1>
         </header>
-        <div className="App-images">{content}</div>
+        <div className="App-images">
+          {content}
+          <AlbumCover />
+        </div>
         <div className="App-buttons" />
       </div>
     );
