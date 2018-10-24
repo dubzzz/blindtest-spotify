@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './AlbumCover.css';
 
 export class AlbumCover extends Component {
   constructor() {

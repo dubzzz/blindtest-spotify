@@ -43,7 +43,7 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(data => {
-        this.setState({ songsLoaded: true, tracks: data.items });
+        this.setState({ songsLoaded: true, tracks: data.items.filter(t => t.track.preview_url != null) });
       });
   }
   render() {
@@ -51,6 +51,7 @@ class App extends Component {
       return <img src={loading} alt="Loading..." />;
     }
     const currentTrack = this.state.tracks[0].track;
+    const buttons = shuffleArray(this.state.tracks.slice(0, 3).map(t => <Button>{t.track.name}</Button>));
     return (
       <div className="App">
         <header className="App-header">
@@ -58,15 +59,10 @@ class App extends Component {
           <h1 className="App-title">Welcome</h1>
         </header>
         <div className="App-images">
-          <p>
-            Received {this.state.tracks.length} songs
-            <br />
-            First song is {currentTrack.name}
-          </p>
           <Sound url={currentTrack.preview_url} playStatus={Sound.status.PLAYING} />
           <AlbumCover track={currentTrack} />
         </div>
-        <div className="App-buttons" />
+        <div className="App-buttons">{buttons}</div>
       </div>
     );
   }
