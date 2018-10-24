@@ -32,7 +32,7 @@ function getRandomNumber(x) {
 class App extends Component {
   constructor() {
     super();
-    this.state = { songsLoaded: false, tracks: null };
+    this.state = { songsLoaded: false, currentTrack: null, tracks: null };
   }
   componentDidMount() {
     fetch('https://api.spotify.com/v1/me/tracks', {
@@ -43,15 +43,26 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(data => {
-        this.setState({ songsLoaded: true, tracks: data.items.filter(t => t.track.preview_url != null) });
+        const tracks = data.items.map(t => t.track).filter(t => t.preview_url != null);
+        const currentTrackIndex = (Math.random() * tracks.length) | 0;
+        const currentTrack = tracks[currentTrackIndex];
+        this.setState({ songsLoaded: true, tracks, currentTrack });
       });
+  }
+  checkAnswer(track) {
+    if (track.id === this.state.currentTrack.id) swal('Congrats!', 'Nice ;)', 'success');
+    else swal('Try again', 'Please try again...', 'error');
   }
   render() {
     if (!this.state.songsLoaded) {
       return <img src={loading} alt="Loading..." />;
     }
-    const currentTrack = this.state.tracks[0].track;
-    const buttons = shuffleArray(this.state.tracks.slice(0, 3).map(t => <Button>{t.track.name}</Button>));
+    const currentTrack = this.state.currentTrack;
+    const shuffledTracks = shuffleArray(this.state.tracks.filter(t => t.id !== currentTrack.id));
+    const availableChoices = [...shuffledTracks.slice(0, 2), currentTrack];
+    const buttons = shuffleArray(
+      availableChoices.map(t => <Button onClick={() => this.checkAnswer(t)}>{t.name}</Button>)
+    );
     return (
       <div className="App">
         <header className="App-header">
