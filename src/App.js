@@ -44,17 +44,32 @@ class App extends Component {
       .then(response => response.json())
       .then(data => {
         const tracks = data.items.map(t => t.track).filter(t => t.preview_url != null);
-        const currentTrackIndex = (Math.random() * tracks.length) | 0;
-        const currentTrack = tracks[currentTrackIndex];
-        this.setState({ songsLoaded: true, tracks, currentTrack });
-      });
+        this.setState({ tracks, currentTrack: null });
+      })
+      .then(() => this.selectRandomSong());
+  }
+  selectRandomSong() {
+    if (this.state.timeout) {
+      clearInterval(this.state.timeout);
+    }
+    const tracks = this.state.tracks;
+    const otherTracks =
+      this.state.currentTrack == null ? tracks : tracks.filter(t => t.id !== this.state.currentTrack.id);
+    const currentTrackIndex = (Math.random() * otherTracks.length) | 0;
+    const currentTrack = otherTracks[currentTrackIndex];
+    const timeout = setTimeout(() => this.selectRandomSong(), 30000);
+    this.setState({ tracks, currentTrack, timeout });
   }
   checkAnswer(track) {
-    if (track.id === this.state.currentTrack.id) swal('Congrats!', 'Nice ;)', 'success');
-    else swal('Try again', 'Please try again...', 'error');
+    if (track.id === this.state.currentTrack.id) {
+      swal('Congrats!', 'Nice ;)', 'success').then(() => {
+        this.selectRandomSong();
+        this.render();
+      });
+    } else swal('Try again', 'Please try again...', 'error');
   }
   render() {
-    if (!this.state.songsLoaded) {
+    if (this.state.currentTrack == null) {
       return <img src={loading} alt="Loading..." />;
     }
     const currentTrack = this.state.currentTrack;
