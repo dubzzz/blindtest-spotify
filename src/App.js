@@ -31,7 +31,7 @@ function getRandomNumber(x) {
 class App extends Component {
   constructor() {
     super();
-    this.state = { songsLoaded: false, text: '' };
+    this.state = { songsLoaded: false, data: null };
   }
   componentDidMount() {
     fetch('https://api.spotify.com/v1/me/tracks', {
@@ -42,12 +42,12 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(data => {
-        this.setState({ songsLoaded: true, text: JSON.stringify(data) });
+        this.setState({ songsLoaded: true, data });
       });
   }
   render() {
     let content = this.state.songsLoaded ? (
-      <p>{this.state.text}</p>
+      <p>Received {this.state.data.items.length} songs</p>
     ) : (
       <p>
         <img src={loading} alt="Loading..." />
