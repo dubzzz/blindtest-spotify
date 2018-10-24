@@ -47,17 +47,9 @@ class App extends Component {
       });
   }
   render() {
-    let content = this.state.songsLoaded ? (
-      <p>
-        Received {this.state.tracks.length} songs
-        <br />
-        First song is {this.state.tracks[0].track.name}
-      </p>
-    ) : (
-      <p>
-        <img src={loading} alt="Loading..." />
-      </p>
-    );
+    if (!this.state.songsLoaded) {
+      return <img src={loading} alt="Loading..." />;
+    }
     return (
       <div className="App">
         <header className="App-header">
@@ -65,8 +57,12 @@ class App extends Component {
           <h1 className="App-title">Welcome</h1>
         </header>
         <div className="App-images">
-          {content}
-          <AlbumCover />
+          <p>
+            Received {this.state.tracks.length} songs
+            <br />
+            First song is {this.state.tracks[0].track.name}
+          </p>
+          <AlbumCover track={this.state.tracks[0].track} />
         </div>
         <div className="App-buttons" />
       </div>

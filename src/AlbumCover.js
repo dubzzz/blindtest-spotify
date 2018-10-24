@@ -5,6 +5,10 @@ export class AlbumCover extends Component {
     super();
   }
   render() {
-    return <p>This is a cover</p>;
+    return (
+      <p>
+        <img src={this.props.track.album.images[0].url} alt="Cover" />
+      </p>
+    );
   }
 }
