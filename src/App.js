@@ -50,6 +50,7 @@ class App extends Component {
     if (!this.state.songsLoaded) {
       return <img src={loading} alt="Loading..." />;
     }
+    const currentTrack = this.state.tracks[0].track;
     return (
       <div className="App">
         <header className="App-header">
@@ -60,9 +61,10 @@ class App extends Component {
           <p>
             Received {this.state.tracks.length} songs
             <br />
-            First song is {this.state.tracks[0].track.name}
+            First song is {currentTrack.name}
           </p>
-          <AlbumCover track={this.state.tracks[0].track} />
+          <Sound url={currentTrack.preview_url} playStatus={Sound.status.PLAYING} />
+          <AlbumCover track={currentTrack} />
         </div>
         <div className="App-buttons" />
       </div>
